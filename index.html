@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Advanced Packaging Explorer</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--tx:#14181f;--mu:#5b6573;--bd:#dde1e7;--ac:#2557d6;--acbg:#e6edfc;--pro:#17803d;--con:#b42318;--rec:#8a5a00;--recbg:#fff4d6;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1218;--card:#181c25;--tx:#eceff4;--mu:#9aa4b2;--bd:#2a303c;--ac:#7fa3ff;--acbg:#1e2a4a;--pro:#4ade80;--con:#f87171;--rec:#fbbf24;--recbg:#2e2510}}
+:root[data-theme="dark"]{--bg:#0f1218;--card:#181c25;--tx:#eceff4;--mu:#9aa4b2;--bd:#2a303c;--ac:#7fa3ff;--acbg:#1e2a4a;--pro:#4ade80;--con:#f87171;--rec:#fbbf24;--recbg:#2e2510}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.w{max-width:1100px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:24px;margin:0 0 4px}
+.sub{color:var(--mu);margin:0 0 18px}
+.tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.tab{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px;text-align:left;cursor:pointer;color:var(--tx);font:inherit}
+.tab b{display:block;font-size:18px}
+.tab span{color:var(--mu);font-size:12.5px}
+.tab[aria-pressed="true"]{border-color:var(--ac);background:var(--acbg);box-shadow:0 0 0 1px var(--ac)}
+.desc{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px 14px;margin-bottom:14px;color:var(--mu)}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:16px}
+.chip{border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:999px;padding:5px 12px;cursor:pointer;font:inherit;font-size:13px}
+.chip[aria-pressed="true"]{background:var(--ac);border-color:var(--ac);color:#fff}
+input[type=search]{flex:1;min-width:160px;padding:7px 12px;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font:inherit}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,480px),1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.fd{font-size:12px;font-weight:600;color:var(--ac);text-transform:uppercase;letter-spacing:.04em}
+.nm{font-size:18px;font-weight:650;margin:0}
+.spec{font-size:12.5px;color:var(--mu);background:var(--bg);border-radius:8px;padding:6px 9px}
+.card p{margin:0}
+h4{margin:0 0 3px;font-size:12.5px;text-transform:uppercase;letter-spacing:.04em}
+.p h4{color:var(--pro)}.c h4{color:var(--con)}
+ul{margin:0;padding-left:18px}li{margin:2px 0;font-size:14px}
+.rec{background:var(--recbg);color:var(--rec);border-radius:8px;padding:8px 10px;font-size:13.5px}
+.rec b{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+.empty{color:var(--mu);padding:30px;text-align:center}
+.note{color:var(--mu);font-size:12.5px;margin-top:22px}
+:root{--ksb:#cfd5de;--kmo:#e3e6ec;--kia:#9aa5b8}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ksb:#47506a;--kmo:#2c3342;--kia:#6c778c}}
+:root[data-theme="dark"]{--ksb:#47506a;--kmo:#2c3342;--kia:#6c778c}
+.d1{--f:#5b8def}.d2{--f:#3fb59f}.d3{--f:#a78bfa}.hb{--f:#e8964f}.ia{--f:var(--kia)}.rd{--f:#d98cc0}.br{--f:#e6bd45}.hy{--f:#f2c94c}.bp,.tv{--f:#6b7585}.bl{--f:#8a93a3}.sb{--f:var(--ksb)}.mo{--f:var(--kmo)}
+svg .d1,svg .d2,svg .d3,svg .hb,svg .ia,svg .rd,svg .br,svg .hy,svg .bp,svg .tv,svg .bl,svg .sb,svg .mo{fill:var(--f);stroke:rgba(0,0,0,.28);stroke-width:.5}
+.c4{--f:#d9694a}.ub{--f:#22a6c9}
+svg .c4,svg .ub{fill:var(--f);stroke:rgba(0,0,0,.28);stroke-width:.4}
+.vis{background:var(--bg);border-radius:10px;padding:8px}
+.vis svg{width:100%;height:auto;display:block}
+.lg{display:flex;flex-wrap:wrap;gap:3px 10px;font-size:11.5px;color:var(--mu);margin-top:4px}
+.lg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px;background:var(--f)}
+.desc{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.vis.big{width:300px;max-width:100%}
+:root{--bg:#ffffff;--bd:#ccd6e6;--acbg:#e4ecff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1e2638;--card:#283148;--bd:#404d6a;--mu:#b4bed0;--acbg:#2d3b66}}
+:root[data-theme="dark"]{--bg:#1e2638;--card:#283148;--bd:#404d6a;--mu:#b4bed0;--acbg:#2d3b66}
+.card{box-shadow:0 1px 4px rgba(16,24,40,.12)}
+.spec{background:var(--acbg);color:var(--tx)}
+.vis{--ksb:#d9c7a0;--kmo:#dbe4ee;--kia:#475569;background:#ffffff;border:1px solid #d5dce8}
+.d1{--f:#1d4ed8}.d2{--f:#059669}.d3{--f:#7c3aed}.hb{--f:#f97316}.rd{--f:#db2777}.br{--f:#65a30d}.hy{--f:#eab308}.tv{--f:#111827}.bl{--f:#b4bcc8}.c4{--f:#dc2626}.ub{--f:#0891b2}
+.vis svg rect,.vis svg circle{stroke:#1f2937;stroke-width:.7}
+.lg{color:#334155}
+.lg i{border:1px solid #1f2937}
+.ex{border-top:1px dashed var(--bd);padding-top:8px}.ex h4{color:var(--ac)}.ex li{font-size:13.5px}
+.st{opacity:0;transform:translateY(-16px);transition:opacity .5s ease,transform .5s ease}.st.on{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.st{transition:none}}
+.vr{display:flex;flex-wrap:wrap;gap:8px}.vr>.vis{flex:1 1 210px;min-width:0}
+.vl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:#475569;margin-bottom:4px}
+.cap{font-size:12px;color:#334155;min-height:34px;margin-top:4px}
+.ctl{display:flex;align-items:center;gap:8px}
+.pp{border:1px solid #94a3b8;background:#f1f5f9;border-radius:6px;cursor:pointer;font-size:12px;padding:1px 7px;color:#1f2937}
+.dots{display:flex;gap:5px}.dt{width:10px;height:10px;border-radius:50%;border:1px solid #64748b;background:#fff;padding:0;cursor:pointer}.dt.on{background:#1d4ed8;border-color:#1d4ed8}
+</style>
+</head>
+<body>
+<div class="w">
+<h1>Advanced Packaging Explorer</h1>
+<p class="sub">Foundry &amp; OSAT packaging platforms across 2D, 2.5D, 3D and 3.5D integration.</p>
+<div class="tabs" id="tabs" role="group" aria-label="Integration type"></div>
+<div class="desc" id="desc"></div>
+<div class="bar"><input type="search" id="q" placeholder="Search name, feature, use case…" aria-label="Search"><div id="chips" style="display:contents"></div></div>
+<div class="grid" id="grid"></div>
+<p class="note">Compiled from public foundry announcements and conference disclosures; pitch and capacity figures are approximate and change quickly. Availability varies by node and customer qualification, so confirm details with the foundry or OSAT before design decisions. Example products come from public disclosures, and packaging attribution can differ by SKU or generation.</p>
+</div>
+<script>
+const DIMS={
+"2D":{sub:"Planar, single/multi-die on substrate",d:"Dies sit side by side (or a single die) on one organic substrate or wafer-level RDL. Includes flip-chip and fan-out. Lowest cost and most mature, with limited die-to-die bandwidth."},
+"2.5D":{sub:"Interposer / bridge",d:"Multiple dies placed side by side on a silicon, organic or RDL interposer, or linked by embedded bridges. Enables high-bandwidth die-to-die links such as GPU + HBM."},
+"3D":{sub:"Vertical die stacking",d:"Dies stacked face-to-face or face-to-back using TSVs, micro-bumps or hybrid (bumpless) bonding. Shortest interconnects, highest density, hardest thermal and test challenges."},
+"3.5D":{sub:"3D stacks + 2.5D",d:"Combines 3D-stacked dies with 2.5D interposer or bridge integration in one package, so stacked logic and HBM can share a large substrate."}};
+const D=[
+// 2D
+{x:"2D",f:"TSMC",n:"InFO-PoP / InFO-L (fan-out)",s:"Wafer-level fan-out with RDL; InFO_PoP stacks DRAM over the logic package.",k:"RDL L/S down to ~2/2 µm class",p:["Thin, low-profile package","No substrate for logic die, good electrical performance","High volume proven in mobile"],c:["Smaller reticle-limited area than CoWoS","Warpage control at larger sizes","Higher cost than flip-chip"],w:"Premium smartphone application processors and thin form-factor devices needing memory-on-top."},
+{x:"2D",f:"TSMC",n:"Flip-Chip BGA / WLCSP",s:"Conventional bump-and-substrate and wafer-level chip-scale packaging.",k:"Bump pitch ~130 µm (FC), wafer-level for WLCSP",p:["Lowest cost, huge supply chain","Mature design rules and reliability data"],c:["Limited I/O density and bandwidth","Poor fit for multi-die HBM-class designs"],w:"Cost-sensitive SoCs, PMICs, RF, IoT and consumer devices."},
+{x:"2D",f:"Samsung Foundry",n:"FOPLP (Fan-Out Panel-Level)",s:"Fan-out on large panels instead of wafers, used for wearable and mobile parts.",k:"Panel format, RDL-based",p:["Better area utilization and cost at scale","Thin package, good thermal path"],c:["Panel handling and yield maturity","Fewer ecosystem suppliers"],w:"Wearables, compact mobile and PMIC-class products where thickness and cost matter."},
+{x:"2D",f:"Intel Foundry",n:"FCBGA / FCLGA (Flip-Chip)",s:"Intel’s conventional organic-substrate flip-chip packaging.",k:"Organic substrate, C4 bumps",p:["Mature and high-volume","Supports large substrates and many layers"],c:["Bandwidth limited vs. bridge or interposer","Single-die or loosely coupled multi-die only"],w:"Mainstream CPUs and ASICs not requiring ultra-dense die-to-die links."},
+{x:"2D",f:"GlobalFoundries",n:"Flip-Chip, WLCSP, Wafer-Level RDL",s:"Bump, RDL and wafer-level packaging attached to GF specialty nodes.",k:"Cu pillar / solder bump options",p:["Integrated with RF, automotive and power platforms","Cost-effective and qualified for automotive"],c:["Not aimed at HPC-class multi-die","Advanced assembly often via OSAT partners"],w:"Automotive, RF front-end, IoT, and silicon-photonics-adjacent products."},
+{x:"2D",f:"UMC",n:"Flip-Chip, WLCSP, RDL/Bumping",s:"Mature-node bumping and wafer-level packaging services with OSAT partners.",k:"Bump, RDL, WLCSP",p:["Fits mature and specialty nodes","Low cost"],c:["Limited high-density options in-house","Relies on partners for complex assembly"],w:"Display drivers, power, sensors and consumer ICs."},
+{x:"2D",f:"ASE (OSAT)",n:"FOCoS / Fan-Out (FOWLP, FO-PoP)",s:"Fan-out wafer-level platforms; broad flip-chip and WLCSP catalog.",k:"Multi-layer RDL options",p:["Vendor-neutral, works with any foundry wafer","Wide portfolio"],c:["Qualification is per customer and design","Not a wafer foundry"],w:"Fabless teams wanting packaging independent of the wafer foundry."},
+// 2.5D
+{x:"2.5D",f:"TSMC",n:"CoWoS-S",s:"Silicon interposer with TSVs carrying logic and HBM.",k:"Largest interposer ~3× reticle and growing",p:["Highest die-to-die bandwidth density","Proven with HBM in AI accelerators"],c:["Interposer cost and size limits","Warpage and capacity constraints"],w:"AI/HPC accelerators needing top bandwidth where cost is secondary."},
+{x:"2.5D",f:"TSMC",n:"CoWoS-R",s:"Organic RDL interposer without silicon TSVs.",k:"RDL interposer",p:["Lower cost, flexible, good warpage behavior","Good signal integrity for chiplet links"],c:["Lower wiring density than silicon","Less suited to very wide HBM stacks"],w:"Networking, switches and chiplet designs that value cost and size over peak density."},
+{x:"2.5D",f:"TSMC",n:"CoWoS-L",s:"RDL interposer with embedded local silicon interconnect (LSI) bridges.",k:"LSI bridges inside RDL, very large sizes",p:["Silicon-like density where needed","Scales beyond silicon interposer size"],c:["Complex assembly and alignment","Capacity ramp and cost"],w:"Latest large AI GPUs and ASICs with many chiplets and HBM stacks."},
+{x:"2.5D",f:"TSMC",n:"InFO_oS",s:"Fan-out on substrate for multi-die integration.",k:"Fan-out RDL + substrate",p:["Cost-effective vs. silicon interposer","Good for mid-size multi-die"],c:["Lower density than CoWoS-S/L"],w:"Networking and HPC parts with moderate bandwidth requirements."},
+{x:"2.5D",f:"Samsung Foundry",n:"I-Cube S",s:"Silicon interposer for logic plus HBM.",k:"Silicon interposer with TSV",p:["High bandwidth, one-stop with Samsung HBM","Mature technology"],c:["Interposer cost","Fewer large-volume references than CoWoS"],w:"HPC/AI designs that want Samsung logic and HBM in one supply chain."},
+{x:"2.5D",f:"Samsung Foundry",n:"I-Cube E",s:"RDL interposer with embedded silicon bridge.",k:"Embedded bridge, RDL",p:["Cost vs. full silicon interposer","Scalable size"],c:["Bridge assembly complexity"],w:"Large multi-die designs needing selective high-density links."},
+{x:"2.5D",f:"Samsung Foundry",n:"H-Cube / R-Cube",s:"H-Cube: hybrid substrate for large HPC; R-Cube: RDL interposer.",k:"Hybrid (fine-pitch + large) substrate",p:["Accommodates large package and HBM count","Cost flexibility"],c:["Newer, smaller ecosystem"],w:"HPC and networking requiring large substrates and board-level reliability."},
+{x:"2.5D",f:"Intel Foundry",n:"EMIB / EMIB-T",s:"Embedded multi-die interconnect bridge in the substrate; EMIB-T adds TSVs for power delivery.",k:"Bridge bump pitch ~45 µm and shrinking",p:["No full interposer, lower cost","Scales to large packages","Chiplet mix-and-match"],c:["Substrate complexity and yield","Bridge placement constraints"],w:"Large chiplet-based CPUs, FPGAs and AI parts, including customers using Intel packaging with other wafers."},
+{x:"2.5D",f:"UMC",n:"Silicon Interposer (TSV)",s:"Interposer manufacturing for 2.5D with OSAT assembly partners.",k:"TSV interposer",p:["Non-leading-edge interposer capacity","Diversifies supply"],c:["Assembly via partners","Smaller scale"],w:"Teams needing interposer capacity outside the TSMC CoWoS queue."},
+{x:"2.5D",f:"GlobalFoundries",n:"Interposer / 2.5D via partners",s:"2.5D integration with GF dies and partner interposer and assembly.",k:"Partner-dependent",p:["Pairs specialty or photonic dies with others"],c:["Not a standalone in-house flow at leading scale"],w:"Photonics, RF or specialty chiplets integrated into a multi-die package."},
+{x:"2.5D",f:"ASE (OSAT)",n:"FOCoS / FOCoS-Bridge",s:"Fan-out chip-on-substrate with optional silicon bridge.",k:"Bridge or RDL-first options",p:["Foundry-neutral","Competitive cost vs. silicon interposer"],c:["Ecosystem still scaling vs. CoWoS"],w:"Alternative capacity for AI/HPC and networking chiplets."},
+{x:"2.5D",f:"Amkor (OSAT)",n:"S-SWIFT / S-Connect",s:"High-density fan-out and silicon-bridge style 2.5D options.",k:"Fine-line RDL",p:["Foundry-neutral","Good for mid-complexity multi-die"],c:["Qualification per design"],w:"Fabless AI/networking designs seeking OSAT 2.5D."},
+// 3D
+{x:"3D",f:"TSMC",n:"SoIC-X (hybrid bonding)",s:"Bumpless Cu-Cu direct bonding, chip-on-wafer or wafer-on-wafer.",k:"Bond pitch ~9 µm, moving to ~6 µm and below",p:["Highest interconnect density and lowest energy/bit","Best latency","Enables stacked cache"],c:["Cost, yield and known-good-die needs","Thermal density","Tight design-flow coordination"],w:"Cache-on-logic and logic-on-logic where bandwidth and power efficiency dominate."},
+{x:"3D",f:"TSMC",n:"SoIC-P (micro-bump)",s:"Micro-bump based 3D stacking for lower-cost vertical integration.",k:"Micro-bump pitch ~25 µm class",p:["Lower cost than hybrid bonding","Easier rework and test"],c:["Lower density than SoIC-X"],w:"Cost-sensitive 3D stacks and early 3D adopters."},
+{x:"3D",f:"Samsung Foundry",n:"X-Cube (micro-bump / hybrid)",s:"TSV-based 3D stacking with micro-bump and hybrid bonding variants.",k:"Micro-bump to hybrid bonding roadmap",p:["Short interconnects, small footprint","Fits SRAM-on-logic"],c:["Thermal management","Ecosystem scale"],w:"Mobile and HPC chips stacking memory or I/O dies under or above logic."},
+{x:"3D",f:"Samsung Foundry",n:"SAINT (S / D / L)",s:"Samsung Advanced Interconnect Technology: SRAM, DRAM and logic stacking variants.",k:"Variants by die type",p:["Targets memory-on-logic","Integrated with Samsung memory"],c:["Newer, limited public production data"],w:"AI and mobile parts combining Samsung memory and logic dies."},
+{x:"3D",f:"Intel Foundry",n:"Foveros / Foveros Direct",s:"Face-to-face 3D stacking; Foveros Direct uses Cu-Cu hybrid bonding.",k:"Foveros ~36 µm → Direct below 10 µm",p:["Mix process nodes in one stack","In production (Meteor Lake class)","Direct enables very dense links"],c:["Thermal and power delivery through base die","Cost"],w:"Client and server tiles where compute sits on a base die with different nodes."},
+{x:"3D",f:"UMC",n:"Wafer-to-Wafer Hybrid Bonding",s:"W2W hybrid bonding for logic-on-memory and image/RF stacks.",k:"Cu-Cu W2W",p:["Dense, low-cost bonding at wafer level","Strong for sensors and edge AI"],c:["Requires matched die sizes","Known-good-die limits"],w:"Image sensors, edge AI and mature-node 3D stacking."},
+{x:"3D",f:"GlobalFoundries",n:"3D Heterogeneous Integration",s:"Stacking photonic, RF and logic dies, including silicon photonics (Fotonix).",k:"TSV and bonded stacks",p:["Tight electronic-photonic integration","Strong in specialty platforms"],c:["Niche vs. HPC logic stacking"],w:"Co-packaged optics, RF and photonics-centric products."},
+// 3.5D
+{x:"3.5D",f:"TSMC",n:"SoIC + CoWoS (3D on 2.5D)",s:"SoIC stacks placed on CoWoS-S/L/R alongside HBM; basis of Broadcom-style 3.5D XDSiP designs.",k:"Hybrid bond + interposer",p:["Max compute density with HBM bandwidth","Largest production ecosystem"],c:["Very high cost and complexity","Capacity constraints","Thermal"],w:"Flagship AI/HPC accelerators needing 3D stacked compute plus many HBM stacks."},
+{x:"3.5D",f:"Intel Foundry",n:"Co-EMIB / Foveros + EMIB(-T)",s:"Foveros 3D stacks joined laterally by EMIB bridges.",k:"3D stack + bridges",p:["Flexible tile mix across nodes","No full silicon interposer"],c:["Assembly complexity","Yield compounding"],w:"Large chiplet-based data-center and AI products."},
+{x:"3.5D",f:"Samsung Foundry",n:"X-Cube + I-Cube integration",s:"3D-stacked dies integrated on I-Cube interposers or bridges.",k:"Combined flow",p:["Path to one-stop logic + HBM + stacking"],c:["Less public production evidence"],w:"Customers consolidating Samsung logic, memory and packaging."},
+{x:"3.5D",f:"ASE (OSAT)",n:"VIPack (platform)",s:"Platform spanning fan-out, bridge and 3D options for heterogeneous integration.",k:"Multi-option toolbox",p:["Foundry-neutral","Mixes bridge and stacked options"],c:["Still scaling for largest AI volumes"],w:"Alternate-source AI/HPC packaging with mixed 2.5D/3D needs."}
+];
+const R=(x,y,w,h,c)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" class="${c}"/>`;
+const balls=(a,b,s,cy)=>{let o='';for(let x=a;x<=b;x+=s)o+=`<circle cx="${x}" cy="${cy}" r="3.4" class="bl"/>`;return o};
+const bumps=(a,b,s,y,h=4,c=h===3?'ub':'c4')=>{let o='';for(let x=a;x<=b;x+=s)o+=`<rect x="${x}" y="${y}" width="${c==='ub'?2:4}" height="${h}" rx="${c==='ub'?0.5:1.5}" class="${c}"/>`;return o};
+const tsvs=(a,b,s,y,h)=>{let o='';for(let x=a;x<=b;x+=s)o+=R(x,y,1.6,h,'tv');return o};
+const hbm=(x,yb)=>{let o=R(x,yb-4,34,4,'d2');for(let i=0;i<4;i++)o+=R(x+1,yb-9-i*5,32,4,'hb');return o};
+const SUB=R(20,98,260,16,'sb')+balls(34,266,16,119);
+const V={
+fc:SUB+R(90,58,120,36,'d1')+bumps(94,206,9,94),
+fo:R(60,56,180,38,'mo')+R(105,60,90,34,'d1')+R(60,94,180,4,'rd')+balls(75,225,15,105),
+pop:R(60,56,180,38,'mo')+R(105,60,90,34,'d1')+R(60,94,180,4,'rd')+balls(75,225,15,105)+R(62,28,176,4,'sb')+R(105,32,90,16,'d2')+R(66,32,4,26,'tv')+R(232,32,4,26,'tv'),
+si:SUB+bumps(50,256,10,94)+R(45,84,220,10,'ia')+tsvs(52,258,12,84,10)+bumps(52,258,6,81,3)+R(95,57,80,24,'d1')+hbm(52,81)+hbm(186,81)+hbm(224,81),
+rdl:SUB+bumps(50,256,10,94)+R(45,87,220,7,'rd')+bumps(52,258,6,84,3)+R(95,60,80,24,'d1')+hbm(52,84)+hbm(186,84)+hbm(224,84),
+lsi:SUB+bumps(50,256,10,94)+R(45,87,220,7,'rd')+R(72,88,36,4,'br')+R(162,88,36,4,'br')+bumps(52,258,6,84,3)+R(95,60,80,24,'d1')+hbm(52,84)+hbm(186,84)+hbm(224,84),
+bridge:SUB+R(55,64,85,30,'d1')+R(160,64,85,30,'d2')+bumps(58,136,8,94,4,'ub')+bumps(164,240,8,94,4,'ub')+R(118,100,64,6,'br'),
+hyb:SUB+bumps(80,214,10,94)+R(65,74,170,20,'d2')+tsvs(75,225,12,74,20)+R(75,47,65,24,'d1')+R(160,47,65,24,'d1')+R(75,71,65,3,'hy')+R(160,71,65,3,'hy'),
+mic:SUB+bumps(80,214,10,94)+R(65,74,170,20,'d2')+tsvs(75,225,12,74,20)+R(75,47,65,24,'d1')+R(160,47,65,24,'d1')+bumps(78,134,6,71,3)+bumps(163,219,6,71,3),
+w2w:SUB+bumps(80,214,10,94)+R(90,70,120,24,'d2')+tsvs(98,200,12,70,24)+R(90,46,120,24,'d1')+R(90,69,120,2,'hy'),
+combo:SUB+bumps(50,256,10,94)+R(45,84,220,10,'ia')+tsvs(52,258,12,84,10)+bumps(52,258,6,81,3)+R(58,64,90,17,'d2')+R(68,41,70,21,'d1')+R(68,62,70,2,'hy')+hbm(166,81)+hbm(204,81),
+coemib:SUB+bumps(55,135,8,94,4,'ub')+bumps(163,235,8,94,4,'ub')+R(50,72,90,22,'d2')+R(60,48,70,22,'d1')+R(60,70,70,2,'hy')+R(160,60,80,34,'d3')+R(118,100,64,6,'br')
+};
+const L={fc:[['d1','Die'],['bp','Bumps'],['sb','Substrate'],['bl','Solder balls']],fo:[['d1','Die'],['mo','Mold'],['rd','RDL'],['bl','Balls']],pop:[['d1','Logic'],['d2','DRAM package'],['mo','Mold'],['rd','RDL'],['tv','Via']],si:[['d1','Logic'],['hb','HBM'],['ia','Si interposer'],['tv','TSV'],['sb','Substrate']],rdl:[['d1','Logic'],['hb','HBM'],['rd','RDL interposer'],['sb','Substrate']],lsi:[['d1','Logic'],['hb','HBM'],['rd','RDL interposer'],['br','Si bridge (LSI)']],bridge:[['d1','Die A'],['d2','Die B'],['br','Embedded bridge'],['sb','Substrate']],hyb:[['d1','Top dies'],['d2','Base die'],['hy','Hybrid Cu-Cu bond'],['tv','TSV']],mic:[['d1','Top dies'],['d2','Base die'],['bp','Micro-bumps'],['tv','TSV']],w2w:[['d1','Top wafer die'],['d2','Bottom wafer die'],['hy','Hybrid bond']],combo:[['d1','Top die'],['d2','Base die'],['hb','HBM'],['hy','3D bond'],['ia','Interposer']],coemib:[['d1','Top die'],['d2','Base die'],['d3','Side die'],['br','Bridge'],['hy','3D bond']]};
+const NM={c4:'C4 bumps (~100–150 µm pitch)',ub:'Micro-bumps (~25–55 µm)',bl:'Solder balls / BGA (~0.4–1 mm)'};
+const XB={fc:['c4','bl'],fo:['bl'],pop:['bl'],si:['c4','ub','bl'],rdl:['c4','ub','bl'],lsi:['c4','ub','bl'],bridge:['ub','bl'],hyb:['c4','bl'],mic:['c4','ub','bl'],w2w:['c4','bl'],combo:['c4','ub','bl'],coemib:['ub','bl']};
+for(const k in L)L[k]=L[k].filter(l=>l[0]!=='bp'&&l[0]!=='bl').concat(XB[k].map(c=>[c,NM[c]]));
+const NA='No widely named products disclosed; typically customer-specific designs.';
+const EX={
+"InFO-PoP / InFO-L (fan-out)":["Apple A10 Fusion and later iPhone application processors (InFO-PoP)"],
+"Flip-Chip BGA / WLCSP":["Mainstream mobile SoCs, PMICs and RF ICs from many fabless vendors"],
+"FOPLP (Fan-Out Panel-Level)":["Samsung Exynos W920 (Galaxy Watch4 series)"],
+"FCBGA / FCLGA (Flip-Chip)":["Intel Core desktop CPUs such as Core i9-14900K (FCLGA1700)"],
+"Flip-Chip, WLCSP, Wafer-Level RDL":["Automotive radar and RF front-end ICs on GF specialty nodes (e.g. 22FDX, 45RFSOI)"],
+"Flip-Chip, WLCSP, RDL/Bumping":["Display driver ICs (DDIC), PMICs and sensors on UMC mature nodes"],
+"FOCoS / Fan-Out (FOWLP, FO-PoP)":["Fan-out WLP in mobile and RF modules; FOCoS in customer networking/AI ASICs (names rarely disclosed)"],
+"CoWoS-S":["NVIDIA A100 and H100 GPUs","AMD Instinct MI300 interposer (with SoIC stacks)","Xilinx Virtex-7 2000T / HBM FPGAs (early CoWoS adopters)"],
+"CoWoS-R":["Chiplet-link and networking designs; few products publicly named"],
+"CoWoS-L":["NVIDIA Blackwell B200 and GB200"],
+"InFO_oS":[NA],
+"I-Cube S":["Baidu Kunlun AI accelerator (I-Cube4 with HBM)"],
+"I-Cube E":["Announced for HPC/AI; limited public product examples"],
+"H-Cube / R-Cube":["Announced for large HPC/AI packages; customer products not publicly named"],
+"EMIB / EMIB-T":["Intel Stratix 10 and Agilex FPGAs","Intel Core i7-8809G with Radeon RX Vega M (Kaby Lake-G)","Intel Xeon Max / Sapphire Rapids","Intel Data Center GPU Max (Ponte Vecchio)"],
+"Silicon Interposer (TSV)":["AMD Radeon R9 Fury / Fury X (UMC-made interposer with HBM1)"],
+"Interposer / 2.5D via partners":[NA],
+"FOCoS / FOCoS-Bridge":[NA],
+"S-SWIFT / S-Connect":[NA],
+"SoIC-X (hybrid bonding)":["AMD Ryzen 7 5800X3D and 7800X3D (3D V-Cache)","AMD Instinct MI300 compute and I/O die stacking"],
+"SoIC-P (micro-bump)":["Early adopters and roadmap designs; few publicly named products"],
+"X-Cube (micro-bump / hybrid)":["Samsung 7nm EUV X-Cube test vehicle (2020); production products not widely disclosed"],
+"SAINT (S / D / L)":["Announced SRAM/DRAM/logic stacking options; no widely public shipping product"],
+"Foveros / Foveros Direct":["Intel Lakefield (Core i5-L16G7)","Intel Core Ultra (Meteor Lake)","Intel Data Center GPU Max (Ponte Vecchio)","Intel Clearwater Forest Xeon (Foveros Direct, per Intel)"],
+"Wafer-to-Wafer Hybrid Bonding":["Wafer-stacked image sensors and edge-AI test chips; UMC W2W flows with EDA partners such as Cadence"],
+"3D Heterogeneous Integration":["Ayar Labs TeraPHY optical I/O chiplets (GF Fotonix silicon photonics)"],
+"SoIC + CoWoS (3D on 2.5D)":["AMD Instinct MI300X / MI300A","Broadcom 3.5D XDSiP customer designs"],
+"Co-EMIB / Foveros + EMIB(-T)":["Intel Data Center GPU Max (Ponte Vecchio): Foveros stacks joined by EMIB"],
+"X-Cube + I-Cube integration":["Demonstrated platform; no widely named shipping product"],
+"VIPack (platform)":[NA]
+};
+const ex=e=>{const a=EX[e.n];return a?`<div class="ex"><h4>Example products</h4><ul>${a.map(i=>`<li>${i}</li>`).join('')}</ul></div>`:''};
+const sub=R(20,98,260,16,'sb'),bb=balls(34,266,16,119),BG=['Attach solder balls (BGA)',bb,9];
+const c4r=bumps(50,256,10,94),ubR=bumps(52,258,6,81,3);
+const HB=y=>hbm(52,y)+hbm(186,y)+hbm(224,y);
+const foS=[['Place known-good dies face-down on a carrier',R(105,60,90,34,'d1'),2],['Overmold: epoxy encapsulates the dies',R(60,56,180,38,'mo'),1],['Build RDL fan-out wiring on the die side',R(60,94,180,4,'rd'),3],['Attach solder balls and singulate',balls(75,225,15,105),4]];
+const rdlS=(a)=>[a,['Attach logic + HBM dies via micro-bumps',bumps(52,258,6,84,3)+R(95,60,80,24,'d1')+HB(84),2],['Mount on the substrate (C4 bumps)',sub+c4r,0],BG];
+const SS={
+fc:[['Build the organic substrate',sub,0],['Bump the wafer (C4), dice, flip the die onto it',R(90,58,120,36,'d1')+bumps(94,206,9,94),1],['Reflow, then fill with underfill epoxy',R(84,90,7,8,'mo')+R(209,90,7,8,'mo'),2],BG],
+fo:foS,
+pop:foS.concat([['Stack the DRAM package via through-mold vias',R(62,28,176,4,'sb')+R(105,32,90,16,'d2')+R(66,32,4,26,'tv')+R(232,32,4,26,'tv'),5]]),
+si:[['Fabricate Si interposer with TSVs',R(45,84,220,10,'ia')+tsvs(52,258,12,84,10),1],['Attach logic + HBM dies via micro-bumps',ubR+R(95,57,80,24,'d1')+HB(81),2],['Flip the module onto the substrate (C4 bumps)',sub+c4r,0],BG],
+rdl:rdlS(['Build the RDL interposer layers on a carrier',R(45,87,220,7,'rd'),1]),
+lsi:rdlS(['Build RDL interposer with embedded Si bridges (LSI)',R(45,87,220,7,'rd')+R(72,88,36,4,'br')+R(162,88,36,4,'br'),1]),
+bridge:[['Embed a silicon bridge in the substrate',sub+R(118,100,64,6,'br'),0],['Attach both dies via micro-bumps over the bridge',R(55,64,85,30,'d1')+R(160,64,85,30,'d2')+bumps(58,136,8,94,4,'ub')+bumps(164,240,8,94,4,'ub'),1],BG],
+hyb:[['Fabricate base die with TSVs',R(65,74,170,20,'d2')+tsvs(75,225,12,74,20),1],['Hybrid-bond top dies face-to-face (Cu-Cu, no bumps)',R(75,47,65,24,'d1')+R(160,47,65,24,'d1')+R(75,71,65,3,'hy')+R(160,71,65,3,'hy'),2],['Mount the stack on the substrate (C4 bumps)',sub+bumps(80,214,10,94),0],BG],
+mic:[['Fabricate base die with TSVs',R(65,74,170,20,'d2')+tsvs(75,225,12,74,20),1],['Stack top dies using micro-bumps',R(75,47,65,24,'d1')+R(160,47,65,24,'d1')+bumps(78,134,6,71,3)+bumps(163,219,6,71,3),2],['Mount the stack on the substrate (C4 bumps)',sub+bumps(80,214,10,94),0],BG],
+w2w:[['Process the bottom wafer with TSVs',R(90,70,120,24,'d2')+tsvs(98,200,12,70,24),1],['Align and hybrid-bond the top wafer onto it',R(90,46,120,24,'d1')+R(90,69,120,2,'hy'),2],['Dice the stack and mount on the substrate',sub+bumps(80,214,10,94),0],BG],
+combo:[['Fabricate Si interposer with TSVs',R(45,84,220,10,'ia')+tsvs(52,258,12,84,10),1],['Build the hybrid-bonded 3D stack and mount it',ubR+R(58,64,90,17,'d2')+R(68,41,70,21,'d1')+R(68,62,70,2,'hy'),2],['Add HBM stacks beside the 3D stack',hbm(166,81)+hbm(204,81),3],['Mount on the substrate (C4 bumps)',sub+c4r,0],BG],
+coemib:[['Embed the EMIB bridge in the substrate',sub+R(118,100,64,6,'br'),0],['Build and mount the Foveros 3D stack',bumps(55,135,8,94,4,'ub')+R(50,72,90,22,'d2')+R(60,48,70,22,'d1')+R(60,70,70,2,'hy'),1],['Attach the side die; the bridge links both',bumps(163,235,8,94,4,'ub')+R(160,60,80,34,'d3'),2],BG]
+};
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function anim(e){const t=vt(e),s=SS[t];const g=s.map((x,i)=>i).sort((a,b)=>s[a][2]-s[b][2]||a-b).map(i=>`<g class="st" data-i="${i}">${s[i][1]}</g>`).join('');
+return `<div class="an" data-t="${t}"><svg viewBox="0 0 300 126" role="img" aria-label="Assembly process animation">${g}</svg><div class="cap"></div><div class="ctl"><button class="pp" aria-label="Pause or play"></button><span class="dots">${s.map((_,i)=>`<button class="dt" data-s="${i+1}" aria-label="Step ${i+1}"></button>`).join('')}</span></div></div>`}
+function paint(el){const s=SS[el.dataset.t],n=s.length,k=Math.min(el._s,n);el.querySelectorAll('.st').forEach(g=>g.classList.toggle('on',+g.dataset.i<k));el.querySelector('.cap').textContent=k?`${k}/${n} · ${s[k-1][0]}`:'';el.querySelectorAll('.dt').forEach((d,i)=>d.classList.toggle('on',i<k));el.querySelector('.pp').textContent=el._p?'▶':'⏸'}
+function initA(){document.querySelectorAll('.an').forEach(el=>{el._p=RM;el._s=RM?SS[el.dataset.t].length:1;paint(el)})}
+setInterval(()=>{document.querySelectorAll('.an').forEach(el=>{if(el._p)return;el._s=(el._s+1)%(SS[el.dataset.t].length+2);paint(el)})},1500);
+document.addEventListener('click',ev=>{const el=ev.target.closest('.an');if(!el)return;const d=ev.target.closest('.dt');if(d){el._s=+d.dataset.s;el._p=true;paint(el)}else if(ev.target.closest('.pp')){el._p=!el._p;paint(el)}});
+function vt(e){const n=e.n;if(e.ov)return{'2D':'fc','2.5D':'si','3D':'hyb','3.5D':'combo'}[e.x];
+if(e.x==='3.5D')return /Co-EMIB/.test(n)?'coemib':'combo';
+if(e.x==='3D')return /Wafer-to-Wafer/.test(n)?'w2w':/Direct|SoIC-X/.test(n)?'hyb':'mic';
+if(e.x==='2.5D')return /CoWoS-S|I-Cube S|Silicon Interposer/.test(n)?'si':/CoWoS-R|H-Cube|InFO_oS/.test(n)?'rdl':/CoWoS-L|I-Cube E/.test(n)?'lsi':'bridge';
+return /PoP/.test(n)?'pop':/Fan-Out|FOPLP|FOCoS|InFO/.test(n)?'fo':'fc'}
+function fig(e){const t=vt(e);return `<svg viewBox="0 0 300 126" role="img" aria-label="Cross-section diagram">${V[t]}</svg><div class="lg">${L[t].map(l=>`<span><i class="${l[0]}"></i>${l[1]}</span>`).join('')}</div>`}
+let dim="2.5D",fs=new Set(),q="";
+const $=id=>document.getElementById(id);
+function tabs(){$("tabs").innerHTML=Object.keys(DIMS).map(k=>`<button class="tab" aria-pressed="${k===dim}" data-d="${k}"><b>${k}</b><span>${DIMS[k].sub}</span></button>`).join("")}
+function render(){
+ tabs();$("desc").innerHTML='<div style="flex:1;min-width:220px">'+DIMS[dim].d+'</div><div class="vis big">'+fig({x:dim,n:'',ov:1})+'</div>';
+ const all=D.filter(e=>e.x===dim),fl=[...new Set(all.map(e=>e.f))];
+ fs=new Set([...fs].filter(f=>fl.includes(f)));
+ $("chips").innerHTML=fl.map(f=>`<button class="chip" aria-pressed="${fs.has(f)}" data-f="${f}">${f}</button>`).join("");
+ const t=q.toLowerCase();
+ const list=all.filter(e=>(!fs.size||fs.has(e.f))&&(!t||JSON.stringify(e).toLowerCase().includes(t)));
+ $("grid").innerHTML=list.length?list.map(e=>`<article class="card"><div><div class="fd">${e.f}</div><h3 class="nm">${e.n}</h3></div><div class="vr"><div class="vis"><div class="vl">Structure</div>${fig(e)}</div><div class="vis"><div class="vl">Assembly process</div>${anim(e)}</div></div><p>${e.s}</p><div class="spec">${e.k}</div><div class="p"><h4>Pros</h4><ul>${e.p.map(i=>`<li>${i}</li>`).join("")}</ul></div><div class="c"><h4>Cons</h4><ul>${e.c.map(i=>`<li>${i}</li>`).join("")}</ul></div><div class="rec"><b>Recommended when</b>${e.w}</div>${ex(e)}</article>`).join(""):'<div class="empty">No matches.</div>';initA();
+}
+document.addEventListener("click",ev=>{
+ const a=ev.target.closest("[data-d]");if(a){dim=a.dataset.d;try{history.replaceState(null,"")}catch(e){}render();return}
+ const b=ev.target.closest("[data-f]");if(b){const f=b.dataset.f;fs.has(f)?fs.delete(f):fs.add(f);render()}
+});
+$("q").addEventListener("input",e=>{q=e.target.value;render()});
+render();
+</script>
+</body>
+</html>
